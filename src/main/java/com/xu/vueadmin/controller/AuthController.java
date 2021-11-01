@@ -51,6 +51,7 @@ public class AuthController {
 
         String base64Img = str + encoder.encode(byteArrayOutputStream.toByteArray());
 
+        // 验证码code放入redis
         redisUtil.hset(CommonConst.CAPTCHA_KEY, key, code, 120);
 
         return Result.success(MapUtil.builder()

@@ -25,8 +25,8 @@ public class Result implements Serializable {
         return new Result(ActionEnum.SUCCESS_ACTION.getCode(), ActionEnum.SUCCESS_ACTION.getDesc(), data);
     }
 
-    public static Result fail (Object data) {
-        return new Result(ActionEnum.FAIL_ACTION.getCode(), ActionEnum.FAIL_ACTION.getDesc());
+    public static Result fail (String message) {
+        return new Result(ActionEnum.FAIL_ACTION.getCode(), message);
     }
 
 

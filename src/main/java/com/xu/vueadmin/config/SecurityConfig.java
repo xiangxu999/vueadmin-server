@@ -1,14 +1,15 @@
 package com.xu.vueadmin.config;
 
-import com.xu.vueadmin.security.LoginFailureHandler;
-import com.xu.vueadmin.security.LoginSuccessHandler;
+import com.xu.vueadmin.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * Description Security配置类
@@ -27,6 +28,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private LoginFailureHandler failureHandler;
+
+    @Autowired
+    private CaptchaFilter captchaFilter;
+
+    @Autowired
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    @Autowired
+    private JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
+
+    @Bean
+    JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
+        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager());
+        return jwtAuthenticationFilter;
+    }
 
 
     /**
@@ -56,10 +73,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(URL_WHITELIST).permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
 
                 // 异常处理
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
 
                 // 配置自定义的过滤器
+                .and()
+                // 验证码过滤器
+                .addFilterBefore(captchaFilter, UsernamePasswordAuthenticationFilter.class)
+                // jwt过滤器
+                .addFilter(jwtAuthenticationFilter());
+
+
     }
 }
