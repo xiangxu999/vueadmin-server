@@ -2,6 +2,7 @@ package com.xu.vueadmin.security;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.xu.vueadmin.consts.CommonConst;
+import com.xu.vueadmin.enums.LoginEnum;
 import com.xu.vueadmin.exception.CaptchaException;
 import com.xu.vueadmin.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,6 @@ public class CaptchaFilter extends OncePerRequestFilter {
                 loginFailureHandler.onAuthenticationFailure(request, response, e);
             }
         }
-
         // 校验通过，放行
         filterChain.doFilter(request, response);
     }
@@ -59,12 +59,12 @@ public class CaptchaFilter extends OncePerRequestFilter {
 
         // 验证码为空
         if (StringUtils.isBlank(code) || StringUtils.isBlank(key)) {
-            throw new CaptchaException("验证码错误");
+            throw new CaptchaException(LoginEnum.ERROR_CAPTCHA.getDesc());
         }
 
         // 验证码错误
         if (!code.equals(redisUtil.hget(CommonConst.CAPTCHA_KEY, key))) {
-            throw new CaptchaException("验证码错误");
+            throw new CaptchaException(LoginEnum.ERROR_CAPTCHA.getDesc());
         }
 
         // 验证码只使用一次

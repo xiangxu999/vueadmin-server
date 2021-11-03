@@ -2,6 +2,7 @@ package com.xu.vueadmin.security;
 
 import cn.hutool.json.JSONUtil;
 import com.xu.vueadmin.common.Result;
+import com.xu.vueadmin.enums.LoginEnum;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -29,8 +30,16 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         response.setContentType("application/json;charset=UTF-8");
         ServletOutputStream outputStream = response.getOutputStream();
 
+        String errorMsg = "";
+        // 验证码部分
+        if (LoginEnum.ERROR_CAPTCHA.getDesc().equals(exception.getMessage())) {
+            errorMsg = LoginEnum.ERROR_CAPTCHA.getDesc();
+        } else {
+            // 账号或密码错误
+            errorMsg = LoginEnum.ERROR_LOGIN.getDesc();
+        }
 
-        Result result = Result.fail(exception.getMessage());
+        Result result = Result.fail(errorMsg);
 
         outputStream.write(JSONUtil.toJsonStr(result).getBytes(StandardCharsets.UTF_8));
 

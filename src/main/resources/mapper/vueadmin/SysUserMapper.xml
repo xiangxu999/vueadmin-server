@@ -21,4 +21,5 @@
         id, username, password, avatar, email, city, created, updated, last_login, status
     </sql>
 
+
 </mapper>

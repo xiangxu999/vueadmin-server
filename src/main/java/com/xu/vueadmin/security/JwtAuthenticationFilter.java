@@ -2,6 +2,8 @@ package com.xu.vueadmin.security;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.xu.vueadmin.pojo.SysUser;
+import com.xu.vueadmin.service.impl.SysUserServiceImpl;
 import com.xu.vueadmin.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -30,6 +32,12 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private UserDetailServiceImpl userDetailService;
+
+    @Autowired
+    private SysUserServiceImpl sysUserService;
+
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
     }
@@ -44,7 +52,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 
         Claims claim = jwtUtil.getClaimByToken(jwt);
         if (claim == null) {
-            throw new JwtException("token 异常");
+            throw new JwtException("token异常");
         }
         if (jwtUtil.isTokenExpired(claim)) {
             throw new JwtException("token已过期");
@@ -53,7 +61,9 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         String username = claim.getSubject();
 
         // 获取用户的权限等信息
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, null, null);
+        SysUser sysUser = sysUserService.getByUsername(username);
+
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, null, userDetailService.getUserAuthority(sysUser.getId()));
 
         SecurityContextHolder.getContext().setAuthentication(token);
 

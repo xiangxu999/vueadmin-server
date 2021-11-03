@@ -1,5 +1,6 @@
 package com.xu.vueadmin;
 
+import com.xu.vueadmin.mapper.SysUserMapper;
 import com.xu.vueadmin.pojo.SysUser;
 import com.xu.vueadmin.service.impl.SysUserServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -14,10 +15,11 @@ class VueadminServerApplicationTests {
     @Autowired
     SysUserServiceImpl sysUserService;
 
+    @Autowired
+    SysUserMapper userMapper;
+
     @Test
     void contextLoads() {
-        List<SysUser> list = sysUserService.list();
-        System.out.println(list);
     }
 
 }
