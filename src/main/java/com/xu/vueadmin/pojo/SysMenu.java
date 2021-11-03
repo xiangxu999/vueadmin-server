@@ -1,9 +1,13 @@
 package com.xu.vueadmin.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -19,7 +23,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="SysMenu对象", description="")
+@ApiModel(value="SysMenu对象", description="SysMenu对象")
 public class SysMenu implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -54,6 +58,9 @@ public class SysMenu implements Serializable {
     private LocalDateTime updated;
 
     private Integer status;
+
+    @TableField(exist = false)
+    private List<SysMenu> children = new ArrayList<>();
 
 
 }
