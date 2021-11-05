@@ -32,8 +32,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Autowired
     private SysUserMapper sysUserMapper;
 
-
-
     @Override
     public List<SysMenuVo> getCurrentUserNav() {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -48,14 +46,14 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         return convert(menuTree);
     }
 
-    private List<SysMenuVo> convert(List<SysMenu> menuTree) {
+    public List<SysMenuVo> convert(List<SysMenu> menuTree) {
         List<SysMenuVo> menuVoList = new ArrayList<>();
 
         menuTree.forEach(m -> {
             SysMenuVo sysMenuVo = new SysMenuVo();
 
             sysMenuVo.setId(m.getId());
-            sysMenuVo.setName(m.getPerms());
+            sysMenuVo.setName(m.getName());
             sysMenuVo.setTitle(m.getName());
             sysMenuVo.setComponent(m.getComponent());
             sysMenuVo.setPath(m.getPath());
@@ -72,7 +70,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
 
-    private List<SysMenu> buildTreeMenu(List<SysMenu> menus) {
+    public List<SysMenu> buildTreeMenu(List<SysMenu> menus) {
 
         List<SysMenu> finalMenus = new ArrayList<>();
 

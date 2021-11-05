@@ -5,6 +5,9 @@ import cn.hutool.core.map.MapUtil;
 import com.google.code.kaptcha.Producer;
 import com.xu.vueadmin.common.Result;
 import com.xu.vueadmin.consts.CommonConst;
+import com.xu.vueadmin.mapper.SysUserMapper;
+import com.xu.vueadmin.pojo.SysUser;
+import com.xu.vueadmin.service.impl.SysUserServiceImpl;
 import com.xu.vueadmin.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +19,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.security.Principal;
 
 /**
  * Description 权限控制层
@@ -29,8 +33,12 @@ public class AuthController {
 
     @Autowired
     private Producer producer;
+
     @Autowired
     private RedisUtil redisUtil;
+
+    @Autowired
+    private SysUserServiceImpl sysUserService;
 
 
     @RequestMapping(value = "/captcha", method = RequestMethod.GET)
@@ -59,4 +67,18 @@ public class AuthController {
                 .put("captchaImg", base64Img).build());
 
     }
+
+    @RequestMapping(value = "/system/userInfo")
+    public Result userInfo(Principal principal) {
+        SysUser sysUser = sysUserService.getByUsername(principal.getName());
+
+        return Result.success(MapUtil.builder()
+                .put("id",sysUser.getId())
+                .put("username", sysUser.getUsername())
+                .put("avatar", sysUser.getAvatar())
+                .put("created", sysUser.getCreated())
+                .map());
+    }
+
+
 }

@@ -1,5 +1,6 @@
 package com.xu.vueadmin.pojo;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -53,8 +54,10 @@ public class SysMenu implements Serializable {
     @ApiModelProperty(value = "排序")
     private Integer sort;
 
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime created;
 
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updated;
 
     private Integer status;
