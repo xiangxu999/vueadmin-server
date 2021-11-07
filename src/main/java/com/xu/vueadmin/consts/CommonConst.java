@@ -12,4 +12,6 @@ public class CommonConst {
      * CAPTCHA_KEY
      */
     public final static String CAPTCHA_KEY = "captcha";
+
+    public final static String USER_PASSWORD = "888888";
 }

@@ -23,8 +23,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @param menuId 菜单id
      * @return 用户
      */
-    @Select("SELECT DISTINCT sys_user.* FROM sys_user LEFT JOIN sys_user_role ON sys_user.id = sys_user_role.user_id LEFT JOIN sys_role_menu ON sys_user_role.role_id = sys_role_menu.role_id \n" +
-            "WHERE sys_role_menu.menu_id = #{menuId};")
+    @Select("SELECT DISTINCT sys_user.* FROM sys_user LEFT JOIN sys_user_role ON sys_user.id = sys_user_role.user_id LEFT JOIN sys_role_menu ON sys_user_role.role_id = sys_role_menu.role_id WHERE sys_role_menu.menu_id = #{menuId};")
     List<SysUser> listByMenuId(Long menuId);
 
     /**
